@@ -4,6 +4,7 @@ import { KeyboardEvent, useEffect, useState } from "react";
 import {
   columns,
   finishSquare,
+  formatter,
   rows,
   SquareProps,
   squareSize,
@@ -24,7 +25,7 @@ const StyledMaze = styled.div`
   width: calc(${squareSize} * ${columns}px);
   display: flex;
   flex-wrap: wrap;
-  opacity: 0.5;
+  opacity: 0.3;
   margin-top: 16px;
   margin-bottom: 32px;
 
@@ -60,27 +61,22 @@ export const Maze = () => {
           down: getSquareType(down),
           left: getSquareType(left),
         };
-        const moves = Object.keys(surroundings)
-          .map((position) => {
-            return (
-              surroundings[position] !== null &&
-              `${position} - ${surroundings[position]}`
-            );
-          })
-          .filter(Boolean);
 
-        status.innerText = `You are ${!wasValidMove ? "still" : ""} ${
-          isEqual(currentSquare, startSquare) ? "at the start" : ""
-        } on row ${r + 1}, column ${c + 1}: ${moves.join(", ")}`;
+        const moves = Object.keys(surroundings).filter(
+          (position) => surroundings[position] === "free"
+        );
+
+        // r${r + 1}c${c + 1}
+        status.innerText = `${
+          isEqual(currentSquare, startSquare) ? "You are at the start. " : ""
+        }${
+          !wasValidMove ? "You did not move. " : ""
+        } You can go ${formatter.format(moves)}. (${r + 1}-${c + 1})`;
       }
     };
 
     isMazeFocused && updatePlayerStatus(currentSquare);
   }, [currentSquare, wasValidMove, isMazeFocused]);
-
-  const restartMaze = () => {
-    setCurrentSquare(startSquare);
-  };
 
   const move = ({ dir, type }: { dir: 1 | -1; type: "row" | "col" }) => {
     const r = type === "col" ? currentSquare.r + dir : currentSquare.r;
@@ -111,7 +107,7 @@ export const Maze = () => {
         move({ dir: -1, type: "row" });
         return;
       case "Enter":
-        restartMaze();
+        setCurrentSquare(startSquare);
         return;
       default:
         return;
