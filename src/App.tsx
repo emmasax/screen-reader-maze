@@ -34,14 +34,6 @@ const App = () => {
         </Typography>
 
         <Maze />
-
-        <div id="description">
-          <Typography variant="body" as="p">
-            The start square has a double arrow icon, the wall squares are brown
-            and the finish square is gold with an asterisk icon. You will be
-            moving a grey square along the route.
-          </Typography>
-        </div>
       </GameArea>
 
       <Button onClick={() => setIsHidden(!isHidden)}>
@@ -52,11 +44,3 @@ const App = () => {
 };
 
 export default App;
-
-/*
-
-how fast can you get through the route
-how to speed up screen-reader
-
-
-*/

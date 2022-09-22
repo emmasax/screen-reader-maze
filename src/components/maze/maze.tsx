@@ -5,6 +5,7 @@ import {
   columns,
   finishSquare,
   formatter,
+  mazeLabel,
   rows,
   SquareProps,
   squareSize,
@@ -66,7 +67,6 @@ export const Maze = () => {
           (position) => surroundings[position] === "free"
         );
 
-        // r${r + 1}c${c + 1}
         status.innerText = `${
           isEqual(currentSquare, startSquare) ? "You are at the start. " : ""
         }${
@@ -109,6 +109,10 @@ export const Maze = () => {
       case "Enter":
         setCurrentSquare(startSquare);
         return;
+      case "Escape":
+        giveFocusTo(`[data-button="start"]`);
+        setIsMazeFocused(false);
+        return;
       default:
         return;
     }
@@ -129,7 +133,7 @@ export const Maze = () => {
       <StyledMaze
         tabIndex={0}
         onKeyDown={(e) => handleMove(e)}
-        aria-labelledby="description"
+        aria-label={mazeLabel}
         data-area="maze"
       >
         {Array.from(Array(rows).keys()).map((rowIndex) => {
